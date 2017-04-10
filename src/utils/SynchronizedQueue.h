@@ -20,6 +20,9 @@
 #include <condition_variable>
 #include <mutex>
 #include <queue>
+#include <atomic>
+#include <thread>
+#include <iostream>
 
 namespace canon {
 namespace utils {
@@ -30,22 +33,24 @@ public:
   typedef std::unique_lock<Mutex> Lock;
   typedef std::condition_variable ConditionVariable;
 
-  SynchronizedQueue(size_t maximum_size = -1) : max_size(maximum_size) {}
+  SynchronizedQueue(size_t maximum_size) : max_size(maximum_size), exit(false) {}
 
   ~SynchronizedQueue() {
-    Lock lock(mutex);
-    exit = true;
+    exit.store(true);
     condition.notify_all();
+    Lock lock(mutex);
   }
 
-  void push(Data const &data) {
+  SynchronizedQueue& push(Data const &data) {
+    if(max_size == 0) return *this;
     Lock lock(mutex);
-    if (max_size > 0 && queue.size() > max_size) {
+    if (queue.size() >= max_size) {
       queue.pop();
     }
     queue.push(data);
     lock.unlock();
     condition.notify_one();
+    return *this;
   }
 
   bool empty() const {
@@ -63,16 +68,21 @@ public:
     return true;
   }
 
-  void pop(Data &data) {
+  bool pop(Data &data) {
     Lock lock(mutex);
     while (queue.empty()) {
-      if (exit) {
-        return;
+      if (exit.load()) {
+        return false;
       }
       condition.wait(lock);
     }
-    data = queue.front();
-    queue.pop();
+    if(queue.empty() || exit.load()){
+      return false;
+    } else {
+      data = queue.front();
+      queue.pop();
+      return true;
+    }
   }
 
 private:
@@ -80,7 +90,7 @@ private:
   mutable Mutex mutex;
   ConditionVariable condition;
   size_t max_size;
-  bool exit = false;
+  std::atomic<bool> exit;
 };
 
 } // namespace utils
