@@ -96,7 +96,8 @@ configure_file(
 )
 
 # get all header files
-FILE(GLOB_RECURSE HEADERS "${PROJECT_SOURCE_DIR}/src/*.h")
+FILE(GLOB HEADERS_UTILS "${PROJECT_SOURCE_DIR}/src/utils/*.h")
+set(HEADERS "${HEADERS_UTILS}")
 # get all sources
 FILE(GLOB_RECURSE SOURCES "${PROJECT_SOURCE_DIR}/src/*.cpp")
 
@@ -116,8 +117,6 @@ set(CMAKE_INSTALL_RPATH_USE_LINK_PATH TRUE)
 
 #create library
 add_library(${PROJECT_NAME} SHARED ${SOURCES})
-set_target_properties(${PROJECT_NAME} PROPERTIES
-  PUBLIC_HEADER "${HEADERS}")
 target_link_libraries(${PROJECT_NAME}
   ${BOOST_LIBRARIES}
   ${RSB_LIBRARIES}
@@ -132,6 +131,13 @@ install(TARGETS "${PROJECT_NAME}"
         ARCHIVE DESTINATION lib/static
         PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ GROUP_WRITE
 )
+#install headers
+install(FILES ${HEADERS_UTILS}
+  DESTINATION "${INSTALL_INCLUDE_DIR}/${PROJECT_NAME}/utils/"
+  PERMISSIONS OWNER_READ OWNER_WRITE GROUP_READ GROUP_WRITE
+)
+
+
 
 if(${BUILD_TEST})
   message(STATUS "Testing turned on. Add -DBUILD_TEST=OFF to build without unit tests.")
@@ -152,7 +158,7 @@ export(TARGETS ${PROJECT_NAME} ${APPLICATIONS}
 file(RELATIVE_PATH REL_INCLUDE_DIR "${INSTALL_CMAKE_DIR}"
    "${INSTALL_INCLUDE_DIR}")
 # ... for the install tree
-set(CONF_INCLUDE_DIRS "\${FFORMATION_CMAKE_DIR}/${REL_INCLUDE_DIR}")
+set(CONF_INCLUDE_DIRS "\${${PROJECT_NAME_UPPER}_CMAKE_DIR}/${REL_INCLUDE_DIR}")
 configure_file(cmake/Config.cmake.in
   "${PROJECT_BINARY_DIR}${CMAKE_FILES_DIRECTORY}/${PROJECT_NAME}Config.cmake" @ONLY)
 # ... for both
