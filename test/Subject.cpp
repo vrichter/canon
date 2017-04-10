@@ -54,7 +54,7 @@ TEST(SubjectTest, Connect) {
   // notify
   subject.notify(1);
   subject.notify(2);
-  EXPECT_EQ(2,subscriber.history.size());
+  EXPECT_EQ(2u,subscriber.history.size());
   EXPECT_EQ(1,subscriber.history.at(0));
   EXPECT_EQ(2,subscriber.history.at(1));
 }
@@ -72,7 +72,7 @@ TEST(SubjectTest, DisconnectConnection) {
   connection.disconnect();
   EXPECT_FALSE(connection.connected());
   subject.notify(2);
-  EXPECT_EQ(1,subscriber.history.size());
+  EXPECT_EQ(1u,subscriber.history.size());
   EXPECT_EQ(1,subscriber.history.front());
 }
 
@@ -89,7 +89,7 @@ TEST(SubjectTest, DisconnectSubject) {
   subject.disconnect(connection);
   EXPECT_FALSE(connection.connected());
   subject.notify(2);
-  EXPECT_EQ(1,subscriber.history.size());
+  EXPECT_EQ(1u,subscriber.history.size());
   EXPECT_EQ(1,subscriber.history.front());
 }
 
