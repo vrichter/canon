@@ -17,12 +17,16 @@
 
 #pragma once
 
+// need to turn off warnings for rsb includes
+#pragma GCC diagnostic push
+#pragma GCC diagnostic ignored "-Wdeprecated-declarations"
 #include <rsb/Factory.h>
 #include <rsb/ParticipantConfig.h>
 #include <rsb/Scope.h>
 #include <rsb/converter/ProtocolBufferConverter.h>
 #include <rsb/converter/Repository.h>
 #include <rsc/runtime/TypeStringTools.h>
+#pragma GCC diagnostic pop
 
 namespace canon {
 namespace utils {
@@ -33,8 +37,6 @@ template <typename Type> void register_rst() {
   try {
     boost::shared_ptr<rsb::converter::ProtocolBufferConverter<Type>> converter(
         new rsb::converter::ProtocolBufferConverter<Type>());
-    std::cout << "Register converter: " << rsc::runtime::typeName<Type>()
-              << std::endl;
     rsb::converter::converterRepository<std::string>()->registerConverter(
         converter);
   } catch (const std::exception &e) {
