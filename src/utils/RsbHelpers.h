@@ -15,7 +15,8 @@
 **                                                                 **
 ********************************************************************/
 
-#pragma once
+#ifndef CANON_RSBHELPERS_H
+#define CANON_RSBHELPERS_H
 
 // need to turn off warnings for rsb includes
 #pragma GCC diagnostic push
@@ -94,3 +95,5 @@ typename rsb::Informer<DataType>::Ptr createInformer(
 } // namespace rsbhelpers
 } // namespace utils
 } // namespace canon
+
+#endif /* !CANON_RSBHELPERS_H */

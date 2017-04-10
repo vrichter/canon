@@ -15,7 +15,8 @@
 **                                                                 **
 ********************************************************************/
 
-#pragma once
+#ifndef CANON_EXCEPTION_H
+#define CANON_EXCEPTION_H
 
 #include <exception>
 #include <string>
@@ -35,3 +36,5 @@ private:
 
 } // namespace utils
 } // namespace canon
+
+#endif /* !CANON_EXCEPTION_H */

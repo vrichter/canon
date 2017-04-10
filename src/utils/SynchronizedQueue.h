@@ -15,7 +15,8 @@
 **                                                                 **
 ********************************************************************/
 
-#pragma once
+#ifndef CANON_SYNCHRONIZEDQUEUE_H
+#define CANON_SYNCHRONIZEDQUEUE_H
 
 #include <condition_variable>
 #include <mutex>
@@ -95,3 +96,5 @@ private:
 
 } // namespace utils
 } // namespace canon
+
+#endif /* !CANON_SYNCHRONIZEDQUEUE_H */

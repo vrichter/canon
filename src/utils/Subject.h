@@ -15,7 +15,8 @@
 **                                                                 **
 ********************************************************************/
 
-#pragma once
+#ifndef CANON_SUBJECT_H
+#define CANON_SUBJECT_H
 
 #include <boost/signals2/signal.hpp>
 #include <functional>
@@ -70,3 +71,5 @@ private:
 
 } // namespace utils
 } // namespace canon
+
+#endif /* !CANON_SUBJECT_H */
