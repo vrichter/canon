@@ -59,6 +59,11 @@ void optional_push_back(VectorType &vec, const OptionalData &data) {
   }
 }
 
+template<typename T>
+bool isOfType(const rsb::EventPtr& event){
+  return event->getType() == rsc::runtime::typeName<T>();
+}
+
 rsb::Scope parseScope(const std::string &uri);
 
 rsb::ParticipantConfig
